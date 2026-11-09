@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOM</title>
+    <style>
+body{
+      font-family: Arial;
+    }
+
+    .Subscribtion{
+border: none;
+background-color: black;
+color: white;
+padding: 10px 15px; 
+font-weight: bold;
+border-radius:50px;
+cursor: pointer; 
+margin-bottom:20px ;
+
+
+    }
+    .subscribed{
+     background-color: rgb(240, 240, 240);
+     color: black;
+    }
+    
+    .cost-input{
+      font-size: 15px;
+      padding: 10px;
+    }
+    .Calculate-button{
+      border: none;
+      padding: 12px 15px;
+      color: white;
+      font-size: 15px;
+      background-color: rgb(29, 139, 29);
+      cursor: pointer;
+    }
+
+    </style>
+</head>
+<body>
+<h2>YouTube Subscribe Button</h2>
+   <button  onclick="
+   Subscribe();
+  
+   " class="Subscribtion">Subscribe</button>
+<p>Rock Paper Scissors</p> 
+
+<p>Amazon Shipping Calculator</p>
+<p>Orders under$40=+$10 Shipping.</p>
+<p>Orders over$40=FREE Shipping.</p>
+<input  placeholder="cost of order" class="js-cost-input  cost-input"
+onkeydown="
+handleCostkeydown();
+">
+<button  onclick="
+calculateTotal();
+" class="Calculate-button">Calculate</button>
+
+<p class="js-total-cost"></p>
+
+<script>
+function handleCostkeydown(){
+  if(event.key==='Enter'){
+  calculateTotal();
+}
+
+}
+
+function calculateTotal(){
+const inputElement=document.querySelector('.js-cost-input');
+let cost=Number(inputElement.value);
+
+if(cost<40){
+cost=cost+10;
+}
+document.querySelector('.js-total-cost')
+.innerHTML=`$${cost}`;
+}
+
+function Subscribe(){
+   const buttonElement=document.querySelector('.Subscribtion');
+   if(buttonElement.innerHTML==='Subscribe'){
+    buttonElement.innerHTML='Subscribed';
+    buttonElement.classList.add('subscribed');
+   
+}
+   else{
+     buttonElement.innerHTML='Subscribe';
+      buttonElement.classList.remove('subscribed');
+
+   }
+}
+</script>
+    
+</body>
+</html>

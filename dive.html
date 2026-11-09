@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Calculator</title>
+  <style>
+    body {
+      background-color: #2b2b2b;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .calculator {
+      width: 360px;
+      background-color: #333333;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    }
+
+    /* History Screen */
+    #history {
+      width: 100%;
+      height: 70px;
+      background-color: #222222;
+      color: #aaaaaa;
+      font-size: 13px;
+      text-align: right;
+      padding: 8px;
+      box-sizing: border-box;
+      margin-bottom: 8px;
+      border-radius: 4px;
+      overflow-y: auto;
+    }
+
+    /* Main Screen */
+    #display {
+      width: 100%;
+      height: 45px;
+      background-color: #222222;
+      color: white;
+      font-size: 22px;
+      text-align: right;
+      padding: 8px;
+      box-sizing: border-box;
+      margin-bottom: 12px;
+      border-radius: 4px;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 6px;
+    }
+
+    button {
+      padding: 12px 0;
+      font-size: 15px;
+      cursor: pointer;
+      background-color: #444444;
+      color: white;
+      border: none;
+      border-radius: 4px;
+    }
+
+    button:hover {
+      background-color: #555555;
+    }
+
+    .clear-btn {
+      background-color: #b33939;
+    }
+
+    .equal-btn {
+      background-color: #788257;
+      grid-column: span 2;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="calculator">
+    <!-- History box shown at the top like in the image -->
+    <div id="history"></div>
+    
+    <!-- Main input/result display -->
+    <div id="display">0</div>
+
+    <!-- Buttons Grid -->
+    <div class="buttons">
+      <button onclick="appendValue('7')">7</button>
+      <button onclick="appendValue('8')">8</button>
+      <button onclick="appendValue('9')">9</button>
+      <button onclick="appendOperator('/')">&divide;</button>
+      <button onclick="undo()">Undo</button>
+      <button onclick="clearAll()" class="clear-btn">Clear</button>
+
+      <button onclick="appendValue('4')">4</button>
+      <button onclick="appendValue('5')">5</button>
+      <button onclick="appendValue('6')">6</button>
+      <button onclick="appendOperator('*')">&times;</button>
+      <button onclick="appendValue('(')">(</button>
+      <button onclick="appendValue(')')">)</button>
+
+      <button onclick="appendValue('1')">1</button>
+      <button onclick="appendValue('2')">2</button>
+      <button onclick="appendValue('3')">3</button>
+      <button onclick="appendOperator('-')">&minus;</button>
+      <button onclick="appendValue('**2')"><i>x</i><sup>2</sup></button>
+      <button onclick="appendValue('Math.sqrt(')">&radic;</button>
+
+      <button onclick="appendValue('0')">0</button>
+      <button onclick="appendValue('.')">.</button>
+      <button onclick="appendValue('%')">%</button>
+      <button onclick="appendOperator('+')">+</button>
+      <button onclick="calculateResult()" class="equal-btn">=</button>
+    </div>
+  </div>
+
+  <script>
+    // Beginner-friendly global variables
+    var currentExpression = "";
+    var historyText = "";
+    var isEvaluated = false;
+
+    // Updates both screens with beginner innerHTML code
+    function updateDisplay() {
+      if (currentExpression === "") {
+        document.getElementById("display").innerHTML = "0";
+      } else {
+        document.getElementById("display").innerHTML = currentExpression;
+      }
+      document.getElementById("history").innerHTML = historyText;
+    }
+
+    // Adds numbers or dots
+    function appendValue(val) {
+      if (isEvaluated) {
+        currentExpression = "";
+        isEvaluated = false;
+      }
+      currentExpression = currentExpression + val;
+      updateDisplay();
+    }
+
+    // Adds math operators (+, -, etc.)
+    function appendOperator(op) {
+      isEvaluated = false;
+      currentExpression = currentExpression + op;
+      updateDisplay();
+    }
+
+    // Deletes the last character (like backspace) using beginner substring logic
+    function undo() {
+      if (isEvaluated) {
+        isEvaluated = false;
+      } else if (currentExpression.length > 0) {
+        currentExpression = currentExpression.substring(0, currentExpression.length - 1);
+      }
+      updateDisplay();
+    }
+
+    // Wipes everything clean
+    function clearAll() {
+      currentExpression = "";
+      historyText = "";
+      isEvaluated = false;
+      updateDisplay();
+    }
+
+    // Calculates the answer using beginner-friendly eval()
+    function calculateResult() {
+      try {
+        // We replace friendly symbols with JavaScript math symbols for eval()
+        var mathString = currentExpression
+          .replace(/&times;/g, '*')
+          .replace(/&divide;/g, '/')
+          .replace(/&minus;/g, '-');
+
+        var answer = eval(mathString);
+
+        // Add this calculation to our history panel view
+        historyText = historyText + currentExpression + " = " + answer + "<br>";
+        
+        currentExpression = answer.toString();
+        isEvaluated = true;
+        updateDisplay();
+      } catch (err) {
+        document.getElementById("display").innerHTML = "Error";
+        currentExpression = "";
+      }
+    }
+  </script>
+
+</body>
+</html>
